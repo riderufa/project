@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Задача {{ object.id }}{% endblock %}
+
+{% block content %}
+  <h1>Вопрос</h1>
+  <p><b>Описание</b>: {{ object.text }}</p>
+  <ul>
+    <li>Содержание вопроса: {{ object.text }}</li>
+    <li>Тип вопроса: {{ object.type }}</li>
+    <li>Изображение: {{ object.image }}</li>
+    <li>Время ответа: {{ object.time_limit }}</li>
+    <li>Ответы: {{ object.answers__text_answer }}</li>
+  </ul>
+  <a class="btn btn-light m-2" href="{% url 'poll:question_edit' object.pk %}">Редактировать</a>
+  <a class="btn btn-light m-2" href="{% url 'poll:question_delete' object.pk %}">Удалить</a>
+{% endblock %}
