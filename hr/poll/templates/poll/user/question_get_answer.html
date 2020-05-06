@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-5">
+
+            <div class="card">
+                {% if question.image %}
+                <img src="{{ question.image.url }}" class="card-img-top" alt="..." style="max-width: 540px;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ question.text }}</h5>
+
+                    <ul class="list-group mt-3">
+                        {% for answer in question.answers.all %}
+                        <li class="list-group-item">
+
+                            {% if question.type == 2 %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value=""
+                                    id="defaultCheck{{ answer.pk }}">
+                                <label class="form-check-label" for="defaultCheck{{ answer.pk }}">
+                                    {{ answer.text }}
+                                </label>
+                            </div>
+                            {% endif %}
+                            {% if question.type == 1 %}
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios"
+                                    id="exampleRadios{{ answer.pk }}" value="option{{ answer.pk }}">
+                                <label class="form-check-label" for="exampleRadios{{ answer.pk }}">
+                                    {{ answer.text }}
+                                </label>
+                            </div>
+
+
+                            {% endif %}
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="col-12 mt-3">
+                        <a class="btn btn-outline-success btn-sm" href="{% url 'poll:question_save_answer' pk=question.pk %}">Ответить</a>
+                        <a class="btn btn-outline-secondary btn-sm" href="{{ return_path }}">Вернуться к списку
+                            вопросов</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,13 +1,18 @@
 from django.contrib import admin
-from .models import Question, Answer, UserProfile, Poll, Kit
+from .models import Question, Answer, UserProfile, Poll, Kit, CheckedPoll, CheckedQuestion
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    fields = ['text_question', 'type_question', 'image_question', 'time_limit_question', 'answers_question']
+    fields = ['text', 'type', 'image', 'time_limit', 'kit']
+
+@admin.register(Kit)
+class KitAdmin(admin.ModelAdmin):
+    fields = ['poll', 'question', 'rank']
+
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    fields = ['text_answer', 'valid_answer']
+    fields = ['text', 'valid', 'question']
 
 @admin.register(UserProfile)  
 class ProfileAdmin(admin.ModelAdmin):  
@@ -19,5 +24,13 @@ class KitAdmin(admin.TabularInline):
 
 @admin.register(Poll)
 class PollAdmin(admin.ModelAdmin):
-    fields = ['name', 'time_limit', 'date_pub', 'user']
+    fields = ['name', 'time_limit', 'date_pub', 'user', 'admin']
     inlines = (KitAdmin,)
+
+@admin.register(CheckedPoll)
+class CheckedPollAdmin(admin.ModelAdmin):
+    fields = ['poll', 'user']
+
+@admin.register(CheckedQuestion)
+class CheckedQuestionAdmin(admin.ModelAdmin):
+    fields = ['poll', 'question']

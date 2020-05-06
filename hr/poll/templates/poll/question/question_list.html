@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список вопросов
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12 mt-5">
+			<ul class="list-group">
+				{% for question in questions %}
+				<li class="list-group-item d-flex justify-content-between">
+					{{ question.text }}
+					<div>
+						<a class="text-secondary" href="{% url 'poll:answer_list' pk=question.pk %}">Ответы</a>
+						<a class="text-secondary" href="{% url 'poll:question_details' pk=question.pk %}">Подробно</a>
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

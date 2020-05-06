@@ -17,6 +17,8 @@ from django.urls import reverse_lazy
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+LOGIN_URL = 'login'
+
 LOGIN_REDIRECT_URL = reverse_lazy('poll:index')
 LOGOUT_REDIRECT_URL = reverse_lazy('poll:index')
 # Quick-start development settings - unsuitable for production
@@ -59,7 +61,10 @@ ROOT_URLCONF = 'hr.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        # 'DIRS': ['templates'],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,4 +133,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
 STATIC_URL = '/static/'
+
+# STATIC_URL = '/asset-v1:SkillFactory+PWS-1+5JUN2019+type@asset+block@/'
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]

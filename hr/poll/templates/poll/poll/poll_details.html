@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Задача {{ object.id }}{% endblock %}
+
+{% block content %}
+
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row no-gutters shadow-lg" style="background-color: #e5dfd9;">
+    <div class="col-md-12">
+      <div class="card-body">
+        <h4 class="card-title">Опрос</h4>
+        <h5 class="card-title"><b>Описание</b>: {{ object.name }}</h5>
+        <p class="card-text">Дата публикации: {{ object.date_pub }}</p>
+        <p class="card-text">Администратор: {{ object.admin }}</p>
+        <p class="card-text">Время ответа: {{ object.time_limit }}</p>
+        <p class="card-text">Список вопросов:
+          <ul>
+            {% for question in object.questions.all %}
+            <li>{{ question.text }}</li>
+            {% endfor %}
+          </ul>
+        </p>
+      </div>
+    </div>
+    <a class="btn btn-light m-2" href="{% url 'poll:poll_edit' object.pk %}">Редактировать</a>
+    <a class="btn btn-light m-2" href="{% url 'poll:poll_delete' object.pk %}">Удалить</a>
+  </div>
+</div>
+
+{% endblock %}

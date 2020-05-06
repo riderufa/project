@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<h2>Удаление вопроса {{ kit.question.text }} ID {{ kit.question.id }}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input class="btn btn-light" type="submit" value="Удалить">
+</form>
+{% endblock %}

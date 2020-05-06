@@ -13,15 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 
 from poll.views import RegisterView, CreateUserProfile
+from poll.view_poll import PollList
 
 urlpatterns = [
+    path('', PollList.as_view()),
     path('poll/', include('poll.urls', namespace='poll')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('login/', LoginView.as_view(template_name='poll/login.html'), name='login'),  
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(  
@@ -30,3 +34,5 @@ urlpatterns = [
     ), name='register'),
     path('profile-create/', CreateUserProfile.as_view(), name='profile-create'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

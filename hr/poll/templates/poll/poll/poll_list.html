@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список опросов
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12 mt-5">
+			<ul class="list-group">
+				{% for poll in polls %}
+				<li class="list-group-item d-flex justify-content-between">
+					{{ poll.name }}
+					<div>
+						{% if user.userprofile.type_user == 1 %}
+						<a class="btn btn-secondary btn-sm" href="{% url 'poll:kit_list' pk=poll.pk %}">Редактировать вопросы</a>
+						<a class="btn btn-secondary btn-sm" href="{% url 'poll:poll_set' pk=poll.pk %}">Назначить опрос</a>
+						<a class="btn btn-secondary btn-sm" href="{% url 'poll:poll_details' pk=poll.pk %}">Подробно</a>
+						{% endif %}
+						{% if user.userprofile.type_user == 2 %}
+						<a class="btn btn-secondary btn-sm" href="{% url 'poll:user_question_list' pk=poll.pk %}">Пройти опрос</a>
+						{% endif %}
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

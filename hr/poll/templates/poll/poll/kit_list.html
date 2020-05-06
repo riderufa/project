@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список вопросов
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-12 mt-5">
+			<ul class="list-group">
+				{% for kit in poll.kitpoll.all %}
+				<li class="list-group-item d-flex justify-content-between">
+					{{ kit.question }} Rank {{ kit.rank }}
+					<div>
+						<a class="btn btn-secondary btn-sm" href="{% url 'poll:kit_edit' pk=kit.pk %}">Редактировать</a>
+						<a class="btn btn-outline-danger btn-sm" href="{% url 'poll:kit_delete' pk=kit.pk %}">Удалить</a>
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="col-12 mt-5">
+			<a class="btn btn-secondary btn-sm" href="{% url 'poll:kit_create' pk=poll.pk %}">Добавить вопрос</a>
+		</div>
+	</div>
+</div>
+{% endblock %}
