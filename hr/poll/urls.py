@@ -5,7 +5,7 @@ from .view_question import QuestionCreate, QuestionDetail, QuestionEdit, Questio
 from .view_poll import PollList, PollCreate, PollEdit, PollDelete, PollDetail, PollSet
 from .view_answer import AnswerDelete, AnswerEdit, AnswerList, AnswerCreate
 from .view_kit import KitList, KitCreate, KitDelete, KitEdit
-from .view_user import question_get_answer1, user_question_list, question_save_answer
+from .view_user import question_get_answer, user_question_list, add_answers
 
 app_name = 'poll'
 urlpatterns = [
@@ -19,8 +19,8 @@ urlpatterns = [
     path('kit/create/<int:pk>', KitCreate.as_view(), name='kit_create'),
     path('kit/edit/<int:pk>', KitEdit.as_view(), name='kit_edit'),
     path('kit/delete/<int:pk>', KitDelete.as_view(), name='kit_delete'),
-    path('user/get_answer/<int:pk>', question_get_answer1, name='question_get_answer'),
-    path('user/save_answer/<int:pk>', question_save_answer, name='question_save_answer'),
+    path('user/get_answer/<int:pk>', question_get_answer, name='question_get_answer'),
+    # path('user/save_answer/<int:pk>', question_save_answer, name='question_save_answer'),
     path("user/questions/<int:pk>", user_question_list, name="user_question_list"),
     path('questions/', QuestionList.as_view(), name='question_list'),
     path("questions/details/<int:pk>", QuestionDetail.as_view(), name="question_details"),
@@ -31,4 +31,5 @@ urlpatterns = [
     path('answer/edit/<int:pk>', AnswerEdit.as_view(), name='answer_edit'),
     path('answer/create/<int:pk>', AnswerCreate.as_view(), name='answer_create'),
     path('answer/delete/<int:pk>', AnswerDelete.as_view(), name='answer_delete'),
+    path('user/get_answer/add/', add_answers, name='add_answers'),
 ]

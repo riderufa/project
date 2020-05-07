@@ -61,9 +61,10 @@ class UserQuestionForm(forms.Form):
     admin = forms.ModelChoiceField(label='Администратор', queryset=UserProfile.objects.all(), widget=forms.widgets.Select(attrs={'size': 1}))
 
 class CheckedAnswerForm(forms.ModelForm):
+    answer = forms.ModelChoiceField(label='', queryset=CheckedAnswer.objects.all(), widget=forms.widgets.RadioSelect)
     class Meta:
         model = CheckedAnswer
-        fields = ('checked',)
+        fields = ('answer',)
 
 # class UserAnswerForm(forms.Form):
 #     checked = 

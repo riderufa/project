@@ -20,9 +20,8 @@
 
                             {% if question.type == 2 %}
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value=""
-                                    id="defaultCheck{{ answer.pk }}">
-                                <label class="form-check-label" for="defaultCheck{{ answer.pk }}">
+                                <input class="form-check-input" type="checkbox" value="" id="{{ forloop.counter0 }}">
+                                <label class="form-check-label" for="{{ forloop.counter0 }}">
                                     {{ answer.text }}
                                 </label>
                             </div>
@@ -32,8 +31,8 @@
 
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="exampleRadios"
-                                    id="exampleRadios{{ answer.pk }}" value="option{{ answer.pk }}">
-                                <label class="form-check-label" for="exampleRadios{{ answer.pk }}">
+                                    id="{{ forloop.counter0 }}" value="option{{ forloop.counter0 }}">
+                                <label class="form-check-label" for="{{ forloop.counter0 }}">
                                     {{ answer.text }}
                                 </label>
                             </div>
@@ -46,7 +45,8 @@
                     </ul>
 
                     <div class="col-12 mt-3">
-                        <a class="btn btn-outline-success btn-sm" href="{% url 'poll:question_save_answer' pk=question.pk %}">Ответить</a>
+                        <a onclick="save_answer({{ newpk }}, {{ pk }});" , class="btn btn-outline-success btn-sm"
+                            href="{% url 'poll:index' %}">Ответить</a>
                         <a class="btn btn-outline-secondary btn-sm" href="{{ return_path }}">Вернуться к списку
                             вопросов</a>
                     </div>
@@ -59,6 +59,27 @@
     </div>
 </div>
 
+<script>
+    function save_answer(newpk, pk) {
+        let l = document.querySelectorAll('.form-check-input').length;
+        let answers = '';
+        for (let i = 0; i < l; i++) {
+            if (document.getElementById(i).checked) {
+                answers += '1';
+            } else {
+                answers += '0'
+            }
 
+        };
+        console.log(answers)
+        
+        $.ajax({
+            url: 'add/',
+            data: {valid: answers, pk: pk, newpk: newpk},
+            dataType: "html",
+            
+        });
+    }
+</script>
 
 {% endblock %}

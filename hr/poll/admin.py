@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Question, Answer, UserProfile, Poll, Kit, CheckedPoll, CheckedQuestion
+from .models import Question, Answer, UserProfile, Poll, Kit, CheckedPoll, CheckedQuestion, CheckedAnswer
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
@@ -34,3 +34,7 @@ class CheckedPollAdmin(admin.ModelAdmin):
 @admin.register(CheckedQuestion)
 class CheckedQuestionAdmin(admin.ModelAdmin):
     fields = ['poll', 'question']
+
+@admin.register(CheckedAnswer)
+class CheckedAnswerAdmin(admin.ModelAdmin):
+    fields = ['answer', 'valid', 'question']
