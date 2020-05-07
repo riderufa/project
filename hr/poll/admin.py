@@ -3,7 +3,7 @@ from .models import Question, Answer, UserProfile, Poll, Kit, CheckedPoll, Check
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    fields = ['text', 'type', 'image', 'time_limit', 'kit']
+    fields = ['text', 'type', 'image', 'time_limit']
 
 @admin.register(Kit)
 class KitAdmin(admin.ModelAdmin):
@@ -37,4 +37,4 @@ class CheckedQuestionAdmin(admin.ModelAdmin):
 
 @admin.register(CheckedAnswer)
 class CheckedAnswerAdmin(admin.ModelAdmin):
-    fields = ['answer', 'valid', 'question']
+    fields = ['answer', 'checked', 'question']

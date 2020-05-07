@@ -4,20 +4,29 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+
+# import redis
+# import pickle
 
 from .forms import PollForm, PollSetForm, KitForm
 from .models import Poll, UserProfile, Question
 
+# cache = redis.Redis(host='127.0.0.1', port=6379)
 
-class PollList(LoginRequiredMixin, ListView):  
+class PollList(SuccessMessageMixin, LoginRequiredMixin, ListView):  
     model = Poll
     template_name = 'poll/poll/poll_list.html'
     context_object_name = "polls"
     login_url = 'login'
+    # messages.add_message(request, messages.SUCCESS, 'jhgfjhfjhgfjhgf')
+    success_message = 'asdfasdfasd'
 
     def get_queryset(self):
         current_user = UserProfile.objects.filter(user=self.request.user).first()
         if current_user and current_user.type_user == 2:
+            # cache.set(f'poll{new_poll.pk}user{request.user.pk}', pickle.dumps(new_poll.pk))
             return Poll.objects.filter(user__user=self.request.user)
         return Poll.objects.all()
 

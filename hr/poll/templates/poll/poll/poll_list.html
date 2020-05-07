@@ -6,12 +6,20 @@
 
 {% block content %}
 <div class="container">
+	{% if messages %}
+			{% for message in messages %}
+				<P	{% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+					{{ message }}
+				</p>
+			{% endfor %}
+		{% endif %}
 	<div class="row">
+		
 		<div class="col-12 mt-5">
 			<ul class="list-group">
 				{% for poll in polls %}
 				<li class="list-group-item d-flex justify-content-between">
-					{{ poll.name }}
+					{{ poll.name }} - Дата проведения с {{ poll.date_pub }}
 					<div>
 						{% if user.userprofile.type_user == 1 %}
 						<a class="btn btn-secondary btn-sm" href="{% url 'poll:kit_list' pk=poll.pk %}">Редактировать вопросы</a>

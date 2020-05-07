@@ -26,7 +26,7 @@ class KitCreate(LoginRequiredMixin, CreateView, SingleObjectMixin):
         return initial
 
     def get_success_url(self, *args, **kwargs):
-        return reverse_lazy('poll:poll_kit_list', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('poll:kit_list', kwargs={'pk': self.kwargs['pk']})
 
 
 class KitDelete(LoginRequiredMixin, DeleteView):
@@ -34,7 +34,7 @@ class KitDelete(LoginRequiredMixin, DeleteView):
     model = Kit
 
     def get_success_url(self):
-        return reverse_lazy('poll:poll_kit_list', kwargs={'pk': self.object.poll.pk})
+        return reverse_lazy('poll:kit_list', kwargs={'pk': self.object.poll.pk})
 
 class KitEdit(LoginRequiredMixin, UpdateView):
     template_name = 'poll/kit/kit_edit.html'
@@ -42,4 +42,4 @@ class KitEdit(LoginRequiredMixin, UpdateView):
     form_class = KitEditForm
     
     def get_success_url(self):
-        return reverse_lazy('poll:poll_kit_list', kwargs={'pk': self.object.poll.pk})
+        return reverse_lazy('poll:kit_list', kwargs={'pk': self.object.poll.pk})

@@ -5,6 +5,15 @@
 
 <div class="container">
     <div class="row">
+
+        {% if messages %}
+			{% for message in messages %}
+				<P	{% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+					{{ message }}
+				</p>
+			{% endfor %}
+		{% endif %}
+
         <div class="col-12 mt-5">
 
             <div class="card">
@@ -45,8 +54,8 @@
                     </ul>
 
                     <div class="col-12 mt-3">
-                        <a onclick="save_answer({{ newpk }}, {{ pk }});" , class="btn btn-outline-success btn-sm"
-                            href="{% url 'poll:index' %}">Ответить</a>
+                        <a onclick="save_answer({{ pk }});" , class="btn btn-outline-success btn-sm"
+                            href="{{ return_path }}">Ответить</a>
                         <a class="btn btn-outline-secondary btn-sm" href="{{ return_path }}">Вернуться к списку
                             вопросов</a>
                     </div>
@@ -60,25 +69,25 @@
 </div>
 
 <script>
-    function save_answer(newpk, pk) {
+    function save_answer(pk) {
         let l = document.querySelectorAll('.form-check-input').length;
-        let answers = '';
+        let checked = '';
         for (let i = 0; i < l; i++) {
             if (document.getElementById(i).checked) {
-                answers += '1';
+                checked += '1';
             } else {
-                answers += '0'
+                checked += '0'
             }
 
         };
-        console.log(answers)
+        console.log(checked)
         
         $.ajax({
             url: 'add/',
-            data: {valid: answers, pk: pk, newpk: newpk},
-            dataType: "html",
-            
+            data: {checked: checked, pk: pk},
+            dataType: "html"
         });
+        console.log('OK')
     }
 </script>
 
