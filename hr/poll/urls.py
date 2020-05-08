@@ -6,6 +6,7 @@ from .view_poll import PollList, PollCreate, PollEdit, PollDelete, PollDetail, P
 from .view_answer import AnswerDelete, AnswerEdit, AnswerList, AnswerCreate
 from .view_kit import KitList, KitCreate, KitDelete, KitEdit
 from .view_user import question_get_answer, user_question_list, add_answers
+from .view_checked_poll import CheckedPollList
 
 app_name = 'poll'
 urlpatterns = [
@@ -32,4 +33,5 @@ urlpatterns = [
     path('answer/create/<int:pk>', AnswerCreate.as_view(), name='answer_create'),
     path('answer/delete/<int:pk>', AnswerDelete.as_view(), name='answer_delete'),
     path('user/get_answer/add/', add_answers, name='add_answers'),
+    path('checked_poll/list', CheckedPollList.as_view(), name='checked_poll_list'),
 ]

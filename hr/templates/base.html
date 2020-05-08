@@ -24,6 +24,12 @@
                         <a class="nav-link" href="{% url 'poll:index' %}">Список опросов <span
                                 class="sr-only">(current)</span></a>
                     </li>
+                    {% if user.userprofile.type_user == 2 %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'poll:checked_poll_list' %}">Завершенные опросы<span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    {% endif %}
                     {% if user.userprofile.type_user == 1 %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'poll:poll_create' %}">Создать опрос</a>

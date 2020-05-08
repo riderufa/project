@@ -48,6 +48,8 @@ def user_question_list(request, pk):
         cache.set(f'p{new_poll.pk}u{request.user.pk}time', pickle.dumps(new_poll.pk), ex=poll.time_limit) # , ex=poll.time_limit # Сохраняем в redis pk объекта CheckedPoll со временем (хранится до окончания опроса)
 
     elif not cache.get(f'p{new_poll.pk}u{request.user.pk}time'): # опрос начинали проходить, но время закончилось
+        new_poll.checked = True
+        new_poll.save()
         return redirect(reverse_lazy('poll:index'))
 
     # Рендерим список вопросов
@@ -81,10 +83,10 @@ def question_get_answer(request, pk):
 
     if CheckedQuestion.objects.filter(poll=poll, question=question).first():
         new_question = CheckedQuestion.objects.get(poll=poll, question=question)
-        print(new_question.answers.all().count())
-        if new_question.answers.all().count() != 0:
-            messages.add_message(request, messages.INFO, 'Вы уже ответили на этот вопрос.', extra_tags='alert-danger')
-            return redirect(reverse_lazy('poll:user_question_list', kwargs={'pk': poll.poll.pk}))
+        # print(new_question.answers.all().count())
+        # if new_question.answers.all().count() != 0:
+        #     messages.add_message(request, messages.INFO, 'Вы уже ответили на этот вопрос.', extra_tags='alert-danger')
+        #     return redirect(reverse_lazy('poll:user_question_list', kwargs={'pk': poll.poll.pk}))
     else:
         new_question = CheckedQuestion.objects.create(question=question, poll=poll)
     
@@ -103,7 +105,12 @@ def question_get_answer(request, pk):
     # Рендерим список ответов
     return_path  = request.META.get('HTTP_REFERER','/') # Сохранем метку возврата на предыдущую страницу
     question = Question.objects.get(pk=pk)
-    return render(request, 'poll/user/question_get_answer.html', context={'question': question, 'return_path': return_path, 'pk': pk})
+    context = {'question': question, 'return_path': return_path, 'pk': pk}
+    if CheckedQuestion.objects.filter(poll=poll, question=question).first():
+        new_question = CheckedQuestion.objects.get(poll=poll, question=question)
+        context['answers'] = new_question.answers.all()
+    
+    return render(request, 'poll/user/question_get_answer.html', context=context)
 
 def add_answers(request):
     checked = request.GET['checked'] # Получаем строку с отметками ответов
@@ -113,8 +120,14 @@ def add_answers(request):
     checked_question = CheckedQuestion.objects.get(pk=newpk)
     question = Question.objects.get(pk=pk)
     i = 0
+    
     for answer in question.answers.all():
-        CheckedAnswer.objects.create(answer=answer, checked=checked[i], question=checked_question)
+        checked_answer = CheckedAnswer.objects.filter(answer=answer, question=checked_question).first()
+        if checked_answer:
+            checked_answer.checked = checked[i]
+            checked_answer.save()
+        else:
+            CheckedAnswer.objects.create(answer=answer, checked=checked[i], question=checked_question)
         i += 1
 
     # messages.add_message(request, messages.INFO, 'Ответ на вопрос получен')

@@ -24,6 +24,7 @@
                     <h5 class="card-title">{{ question.text }}</h5>
 
                     <ul class="list-group mt-3">
+                        {% if not answers %}
                         {% for answer in question.answers.all %}
                         <li class="list-group-item">
 
@@ -51,6 +52,38 @@
 
                         </li>
                         {% endfor %}
+                        {% endif %}
+
+                        {% if answers %}
+                        {% for answer in answers.all %}
+                        <li class="list-group-item">
+
+                            {% if question.type == 2 %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="{{ forloop.counter0 }}" {% if answer.checked %} checked {% endif %}>
+                                <label class="form-check-label" for="{{ forloop.counter0 }}">
+                                    {{ answer.answer.text }}
+                                </label>
+                            </div>
+                            {% endif %}
+                            {% if question.type == 1 %}
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios"
+                                    id="{{ forloop.counter0 }}" value="option{{ forloop.counter0 }}" {% if answer.checked %} checked {% endif %}>
+                                <label class="form-check-label" for="{{ forloop.counter0 }}">
+                                    {{ answer.answer.text }}
+                                </label>
+                            </div>
+
+
+                            {% endif %}
+
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+
                     </ul>
 
                     <div class="col-12 mt-3">

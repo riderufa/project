@@ -6,6 +6,7 @@ class CheckedPoll(models.Model):
     # admin = models.ForeignKey('UserProfile', on_delete=models.PROTECT, related_name='admin_checked_polls', verbose_name='администратор', null=True)
     # user = models.ManyToManyField('UserProfile', related_name='user_polls', verbose_name='пользователь', null=True, blank=True)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='user_checked_polls', verbose_name='пользователь', null=True)
+    checked = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return self.poll.name
