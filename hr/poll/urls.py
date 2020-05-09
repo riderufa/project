@@ -6,7 +6,9 @@ from .view_poll import PollList, PollCreate, PollEdit, PollDelete, PollDetail, P
 from .view_answer import AnswerDelete, AnswerEdit, AnswerList, AnswerCreate
 from .view_kit import KitList, KitCreate, KitDelete, KitEdit
 from .view_user import question_get_answer, user_question_list, add_answers
-from .view_checked_poll import CheckedPollList
+from .view_checked_poll import UserCheckedPollList, AdminCheckedPollList
+from .view_stat import get_stat
+from .view_admin import UserList, QuestionUserList, QuestionPollList
 
 app_name = 'poll'
 urlpatterns = [
@@ -21,7 +23,6 @@ urlpatterns = [
     path('kit/edit/<int:pk>', KitEdit.as_view(), name='kit_edit'),
     path('kit/delete/<int:pk>', KitDelete.as_view(), name='kit_delete'),
     path('user/get_answer/<int:pk>', question_get_answer, name='question_get_answer'),
-    # path('user/save_answer/<int:pk>', question_save_answer, name='question_save_answer'),
     path("user/questions/<int:pk>", user_question_list, name="user_question_list"),
     path('questions/', QuestionList.as_view(), name='question_list'),
     path("questions/details/<int:pk>", QuestionDetail.as_view(), name="question_details"),
@@ -33,5 +34,10 @@ urlpatterns = [
     path('answer/create/<int:pk>', AnswerCreate.as_view(), name='answer_create'),
     path('answer/delete/<int:pk>', AnswerDelete.as_view(), name='answer_delete'),
     path('user/get_answer/add/', add_answers, name='add_answers'),
-    path('checked_poll/list', CheckedPollList.as_view(), name='checked_poll_list'),
+    path('user_checked_poll/list', UserCheckedPollList.as_view(), name='user_checked_poll_list'),
+    path('admin_checked_poll/list', AdminCheckedPollList.as_view(), name='admin_checked_poll_list'),
+    path('stat/', get_stat, name='get_stat'),
+    path("user/list/", UserList.as_view(), name="user_list"),
+    path("question/user/list/<int:pk>", QuestionUserList.as_view(), name="question_user_list"),
+    path("question/poll/list/<int:pk>", QuestionPollList.as_view(), name="question_poll_list"),
 ]

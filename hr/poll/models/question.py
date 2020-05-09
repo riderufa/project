@@ -15,6 +15,8 @@ class Question(models.Model):
     image = models.ImageField(upload_to='images/%Y/%m/%d', null=True, blank=True, verbose_name='изображение')
     time_limit = models.IntegerField('предельное время (сек)', null=True, blank=True)
     # answers = models.ManyToManyField('Answer', related_name='question')
+    checked_count = models.IntegerField(null=True, blank=True)
+    valid_count = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.text

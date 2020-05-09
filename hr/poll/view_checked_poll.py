@@ -12,16 +12,17 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from .forms import PollForm, PollSetForm, KitForm
 from .models import CheckedPoll, UserProfile, Question
+from .view_stat import answer_stat
 
 # cache = redis.Redis(host='127.0.0.1', port=6379)
 
-class CheckedPollList(SuccessMessageMixin, LoginRequiredMixin, ListView):  
+class UserCheckedPollList(SuccessMessageMixin, LoginRequiredMixin, ListView):  
     model = CheckedPoll
-    template_name = 'poll/checked_poll/checked_poll_list.html'
+    template_name = 'poll/checked_poll/user_checked_poll_list.html'
     context_object_name = "polls"
     # login_url = 'login'
     # messages.add_message(request, messages.SUCCESS, 'jhgfjhfjhgfjhgf')
-    success_message = 'asdfasdfasd'
+    
 
     def get_queryset(self):
         current_user = UserProfile.objects.filter(user=self.request.user).first()
@@ -30,6 +31,20 @@ class CheckedPollList(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return CheckedPoll.objects.filter(user__user=self.request.user, checked=True)
         # return Poll.objects.all()
 
+
+class AdminCheckedPollList(SuccessMessageMixin, LoginRequiredMixin, ListView):  
+    model = CheckedPoll
+    template_name = 'poll/checked_poll/admin_checked_poll_list.html'
+    context_object_name = "polls"
+    # login_url = 'login'
+    # messages.add_message(request, messages.SUCCESS, 'jhgfjhfjhgfjhgf')
+    
+
+    def get_queryset(self):
+        # if current_user and current_user.type_user == 2:
+            # cache.set(f'poll{new_poll.pk}user{request.user.pk}', pickle.dumps(new_poll.pk))
+        return CheckedPoll.objects.filter(checked=True)
+        # return Poll.objects.all()
 
 # class PollDetail(LoginRequiredMixin, DetailView):
 #     model = Poll

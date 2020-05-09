@@ -27,7 +27,7 @@ class PollForm(forms.ModelForm):
     admin = forms.ModelChoiceField(label='Администратор', queryset=UserProfile.objects.all(), widget=forms.widgets.Select(attrs={'size': 1}), disabled=True)
     class Meta:
         model = Poll
-        fields = ('name', 'date_pub', 'admin', 'time_limit')
+        fields = ('name', 'date_pub', 'admin', 'time_limit', 'test')
 
 class PollSetForm(forms.ModelForm):
     class Meta:

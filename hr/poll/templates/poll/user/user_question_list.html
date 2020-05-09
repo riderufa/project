@@ -15,6 +15,10 @@
 			{% endfor %}
 		{% endif %}
 
+	<p id="ttl_poll" hidden="true">{{ ttl_poll }}</p>
+
+	
+
 	<div class="row">
 		<div class="col-12 mt-5">
 			<ul class="list-group">
@@ -30,4 +34,44 @@
 		</div>
 	</div>
 </div>
+<script>
+
+	//let count = document.querySelector('#count');
+	let timer = document.querySelector('#timer_poll');
+	let ttl_poll = document.querySelector('#ttl_poll').innerHTML
+	
+
+	countSec = ttl_poll % 60
+	countMin = Math.floor(ttl_poll / 60)
+
+	const updateText = () => { 
+		timer.innerHTML = 'Таймер опроса - ' + ('0' + String(countMin)).slice(-2) + ':' + ('0' + String(countSec)).slice(-2);
+	}
+	
+	const countDown = () =>  { 
+		let total = countSec + countMin * 60;
+		timeInterval = setTimeout(countDown, 1000);
+ 		if (total <= 0) {
+			clearTimeout(timeInterval)
+			timer.classList.remove("badge-secondary")
+			timer.classList.add("badge-danger")
+		}
+		if (countSec > 0) {
+			--countSec;
+		} else {
+			if (countMin != 0) {
+				countSec = 59;
+				--countMin;
+			} else {
+				countSec = 0;
+				countMin = 0;
+			}
+		} 
+		updateText()
+	}
+
+	countDown()
+
+	
+</script>
 {% endblock %}

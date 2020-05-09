@@ -29,7 +29,6 @@ def user_question_list(request, pk):
     user = UserProfile.objects.get(user=request.user)
 
     if poll.date_pub > date.today():
-        print(123)
         messages.add_message(request, messages.INFO, f'Дата проведение опроса {poll.date_pub} еще не наступила', extra_tags='alert-danger')
         return redirect(reverse_lazy('poll:index'))
 
@@ -48,13 +47,15 @@ def user_question_list(request, pk):
         cache.set(f'p{new_poll.pk}u{request.user.pk}time', pickle.dumps(new_poll.pk), ex=poll.time_limit) # , ex=poll.time_limit # Сохраняем в redis pk объекта CheckedPoll со временем (хранится до окончания опроса)
 
     elif not cache.get(f'p{new_poll.pk}u{request.user.pk}time'): # опрос начинали проходить, но время закончилось
-        new_poll.checked = True
+        new_poll.checked = True # Устанавливаем опрос завершенным
         new_poll.save()
+        messages.add_message(request, messages.INFO, 'Время, выделенное на опрос закончилось.', extra_tags='alert-danger')
         return redirect(reverse_lazy('poll:index'))
 
     # Рендерим список вопросов
     questions = Question.objects.filter(polls__pk=pk)
-    return render(request, 'poll/user/user_question_list.html', context={'questions': questions})
+    ttl_poll = cache.ttl(f'p{new_poll.pk}u{request.user.pk}time')
+    return render(request, 'poll/user/user_question_list.html', context={'questions': questions, 'ttl_poll': ttl_poll})
 
 
 def question_get_answer(request, pk):
@@ -62,6 +63,7 @@ def question_get_answer(request, pk):
     Получаем список ответов по конкретному вопросу по конкретному опросу для конкретного пользователя
     """
     poll_pk = pickle.loads(cache.get(f'pu{request.user.pk}')) # Получаем из redis pk объекта CheckedPoll
+    # cache.set(f'pk{request.user.pk}', pickle.dumps(pk))
 
     # if poll.date_pub > date.today():
     #     print(123)
@@ -105,10 +107,13 @@ def question_get_answer(request, pk):
     # Рендерим список ответов
     return_path  = request.META.get('HTTP_REFERER','/') # Сохранем метку возврата на предыдущую страницу
     question = Question.objects.get(pk=pk)
-    context = {'question': question, 'return_path': return_path, 'pk': pk}
+    ttl_question = cache.ttl(f'q{new_question.pk}p{poll_pk}u{request.user.pk}time')
+    ttl_poll = cache.ttl(f'p{poll.pk}u{request.user.pk}time')
+    context = {'question': question, 'return_path': return_path, 'pk': pk, 'ttl_question': ttl_question, 'ttl_poll': ttl_poll}
     if CheckedQuestion.objects.filter(poll=poll, question=question).first():
         new_question = CheckedQuestion.objects.get(poll=poll, question=question)
         context['answers'] = new_question.answers.all()
+    
     
     return render(request, 'poll/user/question_get_answer.html', context=context)
 

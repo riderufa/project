@@ -8,6 +8,10 @@ class Poll(models.Model):
     questions = models.ManyToManyField('Question', through='Kit', through_fields=('poll', 'question'), related_name='polls', verbose_name='Список вопросов', null=True, blank=True)
     admin = models.ForeignKey('UserProfile', on_delete=models.PROTECT, related_name='admin_polls', verbose_name='администратор', null=True)
     user = models.ManyToManyField('UserProfile', related_name='user_polls', verbose_name='пользователь', null=True, blank=True)
+    test = models.BooleanField(null=True, blank=True)
+    checked_count = models.IntegerField(null=True, blank=True)
+    valid_count = models.IntegerField(null=True, blank=True)
+    rank = models.IntegerField(null=True, blank=True)
     
 
     def __str__(self):

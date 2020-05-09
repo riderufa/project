@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список опросов
+{% endblock %}
+
+{% block content %}
+<div class="container col-12">
+	{% if messages %}
+			{% for message in messages %}
+				<P	{% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+					{{ message }}
+				</p>
+			{% endfor %}
+		{% endif %}
+	<div class="row col-12">
+		
+		<div class="col-12 mt-5">
+			<ul class="list-group">
+				{% for poll in polls %}
+				<li class="list-group-item d-flex justify-content-between">
+                    <ul>
+                        <li>
+                            {{ poll.poll.name }}
+                        </li>
+                        <li>
+                            Тип: {% if poll.poll.test %} тест {% else %} опрос {% endif %}
+                        </li>
+                        
+                    </ul>
+					<div class="col-8">
+                        <ul class="list-group col-12">
+                        {% for question in poll.questions.all %}
+                            <li class="list-group-item">
+                                {{ question.question.text }}
+                                    <table class="table mt-2">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                              <th scope="col">Ответ</th>
+                                              <th scope="col">Ваш выбор</th>
+                                              {% if poll.poll.test == True %}
+                                              <th scope="col">Правильный ответ</th>
+                                              {% endif %}
+                                              <th scope="col">*</th>
+                                              {% if poll.poll.test == True %}
+                                              <th scope="col">**</th>
+                                              {% endif %}
+                                              
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                    {% for answer in question.answers.all %}
+                                    
+                                        
+                                        
+                                          <tr {% if poll.poll.test %} {% if answer.checked == answer.answer.valid %} class="table-success" {% else %} class="table-danger" {% endif %} {% endif %}>
+                                            <td>
+                                                        {{ answer.answer.text }}
+                                             
+
+                                            </td>
+                                            <td>
+                                                {% if question.question.type == 2 %}
+                                                <input class="form-check-input ml-3" type="checkbox" value="" id="" {% if answer.checked %} checked {% endif %} disabled>
+                                                {% else %}
+                                                <input class="form-check-input ml-3" type="radio" name="" id="" value="" {% if answer.checked %} checked {% endif %} disabled>
+                                                {% endif %}
+                                            </td>
+                                            {% if poll.poll.test == True %}
+                                            <td>
+                                                
+                                                {% if question.question.type == 2 %}
+                                                <input class="form-check-input ml-3" type="checkbox" value="" id="" {% if answer.answer.valid %} checked {% endif %} disabled>
+                                                {% else %}
+                                                <input class="form-check-input ml-3" type="radio" name="" id="" value="" {% if answer.answer.valid %} checked {% endif %} disabled>
+                                                {% endif %}
+                                                
+                                            </td>
+                                            
+                                            
+                                            {% endif %}
+                                            <td>
+                                                {{ answer.answer.checked_count }}
+                                            </td>
+                                            {% if poll.poll.test == True %}
+                                                                                        
+                                            <td>
+                                                {{ answer.answer.valid_count }}
+                                            </td>
+                                            {% endif %}
+                                            
+                                          </tr>
+                                          
+                                        
+                                      
+                                      
+                                      
+                                    
+                                    {% endfor %}
+                                </tbody>
+                                </table>
+                            </li>
+                        {% endfor %}
+                        </ul>
+					</div>
+				</li>
+				{% endfor %}
+            </ul>
+            <p>* - Сколько раз отмечали данный ответ</p>
+            <p>** - Сколько раз данный ответ был отмечен правильно</p>
+		</div>
+	</div>
+</div>
+{% endblock %}

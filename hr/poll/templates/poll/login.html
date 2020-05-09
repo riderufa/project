@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
+{% load bootstrap4 %}
+
 {% block content %}
-<form method="post">
+<div class="container col-6 mt-5">
+<form class="form-group" method="post">
   {% csrf_token %}
-  {{ form.as_ul }}
-  <input type="submit" value="Войти">
+  {% bootstrap_form form %}
+  <input class="btn btn-light" type="submit" value="Войти">
 </form>
+</div>
 {% endblock %}

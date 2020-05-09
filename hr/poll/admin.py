@@ -29,12 +29,12 @@ class PollAdmin(admin.ModelAdmin):
 
 @admin.register(CheckedPoll)
 class CheckedPollAdmin(admin.ModelAdmin):
-    fields = ['poll', 'user']
+    fields = ['poll', 'user', 'valid', 'checked']
 
 @admin.register(CheckedQuestion)
 class CheckedQuestionAdmin(admin.ModelAdmin):
-    fields = ['poll', 'question']
+    fields = ['poll', 'question', 'valid']
 
 @admin.register(CheckedAnswer)
 class CheckedAnswerAdmin(admin.ModelAdmin):
-    fields = ['answer', 'checked', 'question']
+    fields = ['answer', 'checked', 'question', 'valid']

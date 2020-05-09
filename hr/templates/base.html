@@ -20,16 +20,19 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'poll:index' %}">Список опросов <span
                                 class="sr-only">(current)</span></a>
                     </li>
-                    {% if user.userprofile.type_user == 2 %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'poll:checked_poll_list' %}">Завершенные опросы<span
-                                class="sr-only">(current)</span></a>
+                    
+                    <li class="nav-item">
+                        {% if user.userprofile.type_user == 2 %}
+                        <a class="nav-link" href="{% url 'poll:user_checked_poll_list' %}">Завершенные опросы</a>
+                        {% else %}
+                        <a class="nav-link" href="{% url 'poll:admin_checked_poll_list' %}">Завершенные опросы</a>
+                        {% endif %}
                     </li>
-                    {% endif %}
+                    
                     {% if user.userprofile.type_user == 1 %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'poll:poll_create' %}">Создать опрос</a>
@@ -43,16 +46,28 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{% url 'poll:question_list' %}">Список</a>
                             <a class="dropdown-item" href="{% url 'poll:question_create' %}">Создать</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            
                         </div>
                     </li>
-                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        <a class="nav-link" href="{% url 'poll:user_list' %}">Список пользователей</a>
                     </li>
+                    
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'poll:get_stat' %}">Собрать статистику</a>
+                    </li>
+                    {% endif %}
                 </ul>
+                
+                
                 <ul class="navbar-nav justify-content-end">
+                    <li class="nav-item active">
+                        <p class="nav-link mb-0"><span id="timer_poll" class="badge badge-secondary mb-0"></span></p>
+                    </li>
+                    <li class="nav-item active">
+                        <p class="nav-link mb-0"><span id="timer_question" class="badge badge-secondary mb-0"></span></p>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item active">
                         <p class="nav-link mb-0">Привет {{ user.username }}!</p>
@@ -78,7 +93,7 @@
         </nav>
     </header>
 
-    <div class="container mt-3">
+    <div class="container mt-3 col-10">
         {% block content %}
         {% endblock %}
     </div>
