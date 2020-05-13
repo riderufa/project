@@ -2,22 +2,22 @@ from django.shortcuts import render
 from django.views.generic import FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
-# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from .forms import ProfileCreationForm
-# from .models import *
 
-# Create your views here.
+"""
+"""
 
 def index(request):  
     context = {}  
     return render(request, 'poll/index.html', context) 
 
 
-
 class RegisterView(FormView):
-
+    """
+    Создание пользователя
+    """
     form_class = UserCreationForm
 
     def form_valid(self, form):  
@@ -29,7 +29,9 @@ class RegisterView(FormView):
 
 
 class CreateUserProfile(FormView):  
-  
+    """
+    Создание профиля пользователя
+    """
     form_class = ProfileCreationForm
     template_name = 'poll/profile_create.html'
     success_url = reverse_lazy('poll:index')

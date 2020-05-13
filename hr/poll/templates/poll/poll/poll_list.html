@@ -5,64 +5,72 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="container col-12">
 	{% if messages %}
 		{% for message in messages %}
-			<P	{% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
-				{{ message }}
-			</p>
+		<P {% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+			{{ message }}
+		</p>
 		{% endfor %}
 	{% endif %}
-	<div class="row">
-		
-		<div class="col-12 mt-5">
 
+	<div class="row">
+		<div class="col-12 mt-5">
 			<table class="table">
 				<thead class="thead-light">
-				  <tr>
-					<th scope="col">Опрос</th>
-					<th scope="col">Дата проведения с</th>
-					{% if user.userprofile.type_user == 1 %}
-					<th scope="col">Количество попыток</th>
-					<th scope="col">Количество удачных попыток</th>
-					<th scope="col">Балл</th>
-					<th scope="col">Статистика</th>
-					{% endif %}
-					<th scope="col">Управление</th>
-				  </tr>
+					<tr>
+						<th scope="col">Опрос</th>
+						{% if user.userprofile.type_user == 2 %}
+						<th scope="col">Время опроса</th>
+						{% endif %}
+						<th scope="col">Дата проведения с</th>
+						{% if user.userprofile.type_user == 1 %}
+						<th scope="col">Количество попыток</th>
+						<th scope="col">Количество удачных попыток</th>
+						<th scope="col">Балл</th>
+						<th scope="col">Статистика пройденных</th>
+						{% endif %}
+						<th scope="col">Управление</th>
+					</tr>
 				</thead>
 				<tbody>
 					{% for poll in polls %}
-				  <tr>
-					<td>{{ poll.name }}</td>
-					<td>{{ poll.date_pub }}</td>
-					{% if user.userprofile.type_user == 1 %}
-					<td>{{ poll.checked_count }}</td>
-					<td>{{ poll.valid_count }}</td>
-					<td>{{ poll.rank }}</td>
-					<td><a class="btn btn-secondary btn-sm" href="#">Пользователи</a>  <a class="btn btn-secondary btn-sm" href="#">Вопросы</a></td>
-					{% endif %}
-					{% if user.userprofile.type_user == 2 %}
-					<td>
-						
-						<a class="btn btn-secondary btn-sm" href="{% url 'poll:user_question_list' pk=poll.pk %}">Пройти опрос</a>
-					</td>
-					{% else %}
-					
-					
-					<td>
-						<a class="btn btn-secondary btn-sm" href="{% url 'poll:kit_list' pk=poll.pk %}">Редактировать вопросы</a>
-						<a class="btn btn-secondary btn-sm" href="{% url 'poll:poll_set' pk=poll.pk %}">Назначить опрос</a>
-						<a class="btn btn-secondary btn-sm" href="{% url 'poll:poll_details' pk=poll.pk %}">Подробно</a>
-					</td>
-					{% endif %}
-				  </tr>
-				  {% endfor %}
+					<tr>
+						<td>{{ poll.name }}</td>
+						{% if user.userprofile.type_user == 2 %}
+						<td>{{ poll.time_limit }}</td>
+						{% endif %}
+						<td>{{ poll.date_pub }}</td>
+						{% if user.userprofile.type_user == 1 %}
+						<!-- <td>{{ poll.checked_count }}</td> -->
+						<td>{{ poll.checked_poll.count }}</td>
+						<td>{{ poll.valid_count }}</td>
+						<td>{{ poll.rank }}</td>
+						<td><a class="btn btn-secondary btn-sm"
+								href="{% url 'poll:poll_user_list' pk=poll.pk %}">Пользователи</a> <a
+								class="btn btn-secondary btn-sm"
+								href="{% url 'poll:poll_question_list' pk=poll.pk %}">Вопросы</a></td>
+						{% endif %}
+						{% if user.userprofile.type_user == 2 %}
+						<td>
+							<a class="btn btn-secondary btn-sm"
+								href="{% url 'poll:check_poll' pk=poll.pk %}">Пройти опрос</a>
+						</td>
+						{% else %}
+						<td>
+							<a class="btn btn-secondary btn-sm {% if not poll.user.exists %} disabled {% endif %}"
+								href="{% url 'poll:kit_list' pk=poll.pk %}">Редактировать вопросы</a>
+							<a class="btn btn-secondary btn-sm" href="{% url 'poll:poll_set' pk=poll.pk %}">Назначить
+								опрос</a>
+							<a class="btn btn-secondary btn-sm"
+								href="{% url 'poll:poll_details' pk=poll.pk %}">Подробно</a>
+						</td>
+						{% endif %}
+					</tr>
+					{% endfor %}
 				</tbody>
-			  </table>
-
-
-			
+			</table>
 		</div>
 	</div>
 </div>

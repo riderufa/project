@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Список вопросов
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	{% if messages %}
+		{% for message in messages %}
+		<P {% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+			{{ message }}
+		</p>
+		{% endfor %}
+	{% endif %}
+
+	<div class="row">
+		<div class="col-12 mt-5">
+			<ul class="list-group">
+				{% for question in questions %}
+				<li class="list-group-item d-flex justify-content-between">
+					{{ question.text }}
+					<div>
+						<a class="btn btn-secondary btn-sm"
+							href="{% url 'poll:question_get_answer' pk=question.pk %}">Ответить на вопрос</a>
+					</div>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+<script>
+
+
+</script>
+{% endblock %}

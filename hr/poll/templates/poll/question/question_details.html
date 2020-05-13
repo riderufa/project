@@ -16,11 +16,11 @@
         <h5 class="card-title">{{ object.text }}</h5>
         <p class="card-text">Тип вопроса: {{ object.get_type_display }}</p>
         <p class="card-text">Время ответа: {{ object.time_limit }}</p>
-        <p class="card-text">Ответы: 
+        <p class="card-text">Ответы:
           <ul>
-          {% for answer in object.answers.all %}
+            {% for answer in object.answers.all %}
             <li class="{% if answer.valid %} text-success {% else %} text-danger {% endif %}">{{ answer.text }}</li>
-          {% endfor %}
+            {% endfor %}
           </ul>
         </p>
       </div>

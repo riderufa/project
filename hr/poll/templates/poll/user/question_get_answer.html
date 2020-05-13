@@ -2,21 +2,19 @@
 
 {% block content %}
 
-
 <div class="container">
     <div class="row">
-
         {% if messages %}
-			{% for message in messages %}
-				<P	{% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
-					{{ message }}
-				</p>
-			{% endfor %}
-		{% endif %}
+            {% for message in messages %}
+            <P {% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+                {{ message }}
+            </p>
+            {% endfor %}
+        {% endif %}
 
         <div class="col-12 mt-5">
-            <p id="ttl_question" hidden="true">{{ ttl_question }}</p>
             <p id="ttl_poll" hidden="true">{{ ttl_poll }}</p>
+            <p id="ttl_question" hidden="true">{{ ttl_question }}</p>
             <p id="question_pk" hidden="true">{{ pk }}</p>
             <div class="card">
                 {% if question.image %}
@@ -24,12 +22,10 @@
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ question.text }}</h5>
-
                     <ul class="list-group mt-3">
                         {% if not answers %}
                         {% for answer in question.answers.all %}
                         <li class="list-group-item">
-
                             {% if question.type == 2 %}
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="{{ forloop.counter0 }}">
@@ -39,8 +35,6 @@
                             </div>
                             {% endif %}
                             {% if question.type == 1 %}
-
-
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="exampleRadios"
                                     id="{{ forloop.counter0 }}" value="option{{ forloop.counter0 }}">
@@ -48,10 +42,7 @@
                                     {{ answer.text }}
                                 </label>
                             </div>
-
-
                             {% endif %}
-
                         </li>
                         {% endfor %}
                         {% endif %}
@@ -62,24 +53,23 @@
 
                             {% if question.type == 2 %}
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="{{ forloop.counter0 }}" {% if answer.checked %} checked {% endif %}>
+                                <input class="form-check-input" type="checkbox" value="" id="{{ forloop.counter0 }}"
+                                    {% if answer.checked %} checked {% endif %}>
                                 <label class="form-check-label" for="{{ forloop.counter0 }}">
                                     {{ answer.answer.text }}
                                 </label>
                             </div>
                             {% endif %}
+
                             {% if question.type == 1 %}
-
-
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="exampleRadios"
-                                    id="{{ forloop.counter0 }}" value="option{{ forloop.counter0 }}" {% if answer.checked %} checked {% endif %}>
+                                    id="{{ forloop.counter0 }}" value="option{{ forloop.counter0 }}"
+                                    {% if answer.checked %} checked {% endif %}>
                                 <label class="form-check-label" for="{{ forloop.counter0 }}">
                                     {{ answer.answer.text }}
                                 </label>
                             </div>
-
-
                             {% endif %}
 
                         </li>
@@ -87,25 +77,21 @@
                         {% endif %}
 
                     </ul>
-
                     <div class="col-12 mt-3">
-                        <a onclick="save_answer()" class="btn btn-outline-success btn-sm" href="{{ return_path }}">Ответить</a>
+                        <a onclick="save_answer()" class="btn btn-outline-success btn-sm"
+                            href="{{ return_path }}">Ответить</a>
                         <a class="btn btn-outline-secondary btn-sm" href="{{ return_path }}">Вернуться к списку
                             вопросов</a>
                     </div>
                 </div>
             </div>
-
-
         </div>
-
     </div>
 </div>
 
 <script>
 
-
-
+    // Запись ответов в базу
     function save_answer() {
         let l = document.querySelectorAll('.form-check-input').length;
         let pk = document.querySelector('#question_pk').innerHTML;
@@ -118,85 +104,14 @@
             }
 
         };
-        //console.log(checked)
-        
+
         $.ajax({
             url: 'add/',
-            data: {checked: checked, pk: pk},
+            data: { checked: checked, pk: pk },
             dataType: "html"
         });
-        //console.log('OK')
     }
 
-    //let count = document.querySelector('#count');
-	let timerPoll = document.querySelector('#timer_poll');
-	let timerQuestion = document.querySelector('#timer_question');
-    let ttlPoll = document.querySelector('#ttl_poll').innerHTML;
-    let ttlQuestion = document.querySelector('#ttl_question').innerHTML;
-	
-
-	countSecPoll = ttlPoll % 60
-    countMinPoll = Math.floor(ttlPoll / 60)
-    countSecQuestion = ttlQuestion % 60
-	countMinQuestion = Math.floor(ttlQuestion / 60)
-
-
-	const updateTextPoll = () => { 
-		timerPoll.innerHTML = 'Таймер опроса - ' + ('0' + String(countMinPoll)).slice(-2) + ':' + ('0' + String(countSecPoll)).slice(-2);
-    }
-    
-    const updateTextQuestion = () => { 
-		timerQuestion.innerHTML = 'Таймер вопроса - ' + ('0' + String(countMinQuestion)).slice(-2) + ':' + ('0' + String(countSecQuestion)).slice(-2);
-	}
-	
-	const countDownPoll = () =>  { 
-		let total = countSecPoll + countMinPoll * 60;
-		timeInterval = setTimeout(countDownPoll, 1000);
- 		if (total <= 0) {
-            clearTimeout(timeInterval)
-            timerPoll.classList.remove("badge-secondary")
-			timerPoll.classList.add("badge-danger")
-		}
-		if (countSecPoll > 0) {
-			--countSecPoll;
-		} else {
-			if (countMinPoll != 0) {
-				countSecPoll = 59;
-				--countMinPoll;
-			} else {
-				countSecPoll = 0;
-				countMinPoll = 0;
-			}
-		} 
-		updateTextPoll()
-    }
-    
-    const countDownQuestion = () =>  { 
-		let total = countSecQuestion + countMinQuestion * 60;
-		timeInterval = setTimeout(countDownQuestion, 1000);
- 		if (total <= 0) {
-            clearTimeout(timeInterval)
-            timerQuestion.classList.remove("badge-secondary")
-			timerQuestion.classList.add("badge-danger")
-		}
-		if (countSecQuestion > 0) {
-			--countSecQuestion;
-		} else {
-			if (countMinQuestion != 0) {
-				countSecQuestion = 59;
-				--countMinQuestion;
-			} else {
-				countSecQuestion = 0;
-				countMinQuestion = 0;
-			}
-		} 
-		updateTextQuestion()
-	}
-
-    countDownPoll()
-    countDownQuestion()
-    
-    
 </script>
 
 {% endblock %}

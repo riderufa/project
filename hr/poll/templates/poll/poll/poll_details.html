@@ -21,8 +21,8 @@
         </p>
       </div>
     </div>
-    <a class="btn btn-light m-2" href="{% url 'poll:poll_edit' object.pk %}">Редактировать</a>
-    <a class="btn btn-light m-2" href="{% url 'poll:poll_delete' object.pk %}">Удалить</a>
+    <a class="btn btn-light m-2 {% if not object.user.exists %} disabled {% endif %}" href="{% url 'poll:poll_edit' object.pk %}">Редактировать</a>
+    <a class="btn btn-light m-2 {% if not object.user.exists %} disabled {% endif %}" href="{% url 'poll:poll_delete' object.pk %}">Удалить</a>
   </div>
 </div>
 

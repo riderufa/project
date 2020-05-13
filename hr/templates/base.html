@@ -54,12 +54,12 @@
                     </li>
                     
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'poll:get_stat' %}">Собрать статистику</a>
-                    </li>
+                    
                     {% endif %}
                 </ul>
                 
+                <p id="new_poll_pk" hidden="true">{{ new_poll_pk }}</p>
+                <p id="ttl_poll" hidden="true">{{ ttl_poll }}</p>
                 
                 <ul class="navbar-nav justify-content-end">
                     <li class="nav-item active">
@@ -93,6 +93,8 @@
         </nav>
     </header>
 
+    
+
     <div class="container mt-3 col-10">
         {% block content %}
         {% endblock %}
@@ -108,6 +110,91 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+
+
+    <script>
+        let timerPoll = document.querySelector('#timer_poll');
+	    let timerQuestion = document.querySelector('#timer_question');
+        let newPollPk = document.querySelector('#new_poll_pk').innerHTML;
+        
+
+
+        const updateTextPoll = () => { 
+            timerPoll.innerHTML = 'Таймер опроса - ' + ('0' + String(countMinPoll)).slice(-2) + ':' + ('0' + String(countSecPoll)).slice(-2);
+        }
+        
+        const updateTextQuestion = () => { 
+            timerQuestion.innerHTML = 'Таймер вопроса - ' + ('0' + String(countMinQuestion)).slice(-2) + ':' + ('0' + String(countSecQuestion)).slice(-2);
+        }
+	
+        const countDownPoll = () =>  { 
+            let total = countSecPoll + countMinPoll * 60;
+            timeInterval = setTimeout(countDownPoll, 1000);
+            if (total <= 0) {
+                clearTimeout(timeInterval)
+                timerPoll.classList.remove("badge-secondary")
+                timerPoll.classList.add("badge-danger")
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/poll/stat/',
+                    data: {newPollPk: newPollPk},
+                    dataType: "html"
+                });
+            }
+            if (countSecPoll > 0) {
+                --countSecPoll;
+            } else {
+                if (countMinPoll != 0) {
+                    countSecPoll = 59;
+                    --countMinPoll;
+                } else {
+                    countSecPoll = 0;
+                    countMinPoll = 0;
+                }
+            } 
+            updateTextPoll()
+        }
+    
+
+        const countDownQuestion = () =>  { 
+            let total = countSecQuestion + countMinQuestion * 60;
+            timeInterval = setTimeout(countDownQuestion, 1000);
+            if (total <= 0) {
+                clearTimeout(timeInterval)
+                timerQuestion.classList.remove("badge-secondary")
+                timerQuestion.classList.add("badge-danger")
+            }
+            if (countSecQuestion > 0) {
+                --countSecQuestion;
+            } else {
+                if (countMinQuestion != 0) {
+                    countSecQuestion = 59;
+                    --countMinQuestion;
+                } else {
+                    countSecQuestion = 0;
+                    countMinQuestion = 0;
+                }
+            } 
+            updateTextQuestion()
+        }
+
+    
+        if (document.querySelector('#ttl_poll')) {
+            let ttlPoll = document.querySelector('#ttl_poll').innerHTML;
+            if (ttlPoll > 0) {
+                countSecPoll = ttlPoll % 60;
+                countMinPoll = Math.floor(ttlPoll / 60);
+                countDownPoll()
+            }
+        }
+    
+        if (document.querySelector('#ttl_question')) {
+            let ttlQuestion = document.querySelector('#ttl_question').innerHTML;
+            countSecQuestion = ttlQuestion % 60;
+        	countMinQuestion = Math.floor(ttlQuestion / 60);
+            countDownQuestion()
+        }
+    
+    </script>
 
 </body>
 

@@ -29,7 +29,7 @@ class PollAdmin(admin.ModelAdmin):
 
 @admin.register(CheckedPoll)
 class CheckedPollAdmin(admin.ModelAdmin):
-    fields = ['poll', 'user', 'valid', 'checked']
+    fields = ['poll', 'user', 'valid', 'checked', 'validated']
 
 @admin.register(CheckedQuestion)
 class CheckedQuestionAdmin(admin.ModelAdmin):

@@ -7,9 +7,16 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+	{% for message in messages %}
+	<P {% if message.tags %} class="col-12 mt-5 alert {{ message.tags }}" {% endif %} role="alert">
+		{{ message }}
+	</p>
+	{% endfor %}
+{% endif %}
 <form class="form-group" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input class="btn btn-light" type="submit" value="Сохранить">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	<input class="btn btn-light" type="submit" value="Сохранить">
 </form>
 {% endblock %}

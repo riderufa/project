@@ -5,35 +5,40 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="container col-12">
 	<div class="row">
 		<div class="col-12 mt-5">
-
 			<table class="table">
 				<thead class="thead-light">
-				  <tr>
-					<th scope="col">Вопрос</th>
-					<th scope="col">Кол-во попыток</th>
-					<th scope="col">Кол-во правильных ответов</th>
-					<th scope="col">Статистика</th>
-					<th scope="col">Редактирование</th>
-				  </tr>
+					<tr>
+						<th scope="col">Вопрос</th>
+						<th scope="col">Кол-во попыток</th>
+						<th scope="col">Кол-во правильных ответов</th>
+						<th scope="col">Статистика</th>
+						<th scope="col">Редактирование</th>
+					</tr>
 				</thead>
 				<tbody>
 					{% for question in questions %}
-				  <tr>
-					<td>{{ question.text }}</td>
-					<td>{{ question.checked_count }}</td>
-					<td>{{ question.valid_count }}</td>
-					<td><a class="btn btn-secondary btn-sm" href="{% url 'poll:question_user_list' pk=question.pk %}">Пользователи</a>  <a class="btn btn-secondary btn-sm" href="{% url 'poll:question_poll_list' pk=question.pk %}">Опросы</a></td>
-					<td><a class="btn btn-secondary btn-sm" href="{% url 'poll:answer_list' pk=question.pk %}">Ответы</a>	<a class="btn btn-secondary btn-sm" href="{% url 'poll:question_details' pk=question.pk %}">Подробно</a></td>
-				  </tr>
-				  {% endfor %}
+					<tr>
+						<td>{{ question.text }}</td>
+						<td>{{ question.checked_questions.count }}</td>
+						<td>{{ question.valid_count }}</td>
+						<td><a class="btn btn-secondary btn-sm"
+								href="{% url 'poll:question_user_list' pk=question.pk %}">Пользователи</a> <a
+								class="btn btn-secondary btn-sm"
+								href="{% url 'poll:question_poll_list' pk=question.pk %}">Опросы</a></td>
+						<td><a class="btn btn-secondary btn-sm"
+								href="{% url 'poll:answer_list' pk=question.pk %}">Ответы</a> <a
+								class="btn btn-secondary btn-sm"
+								href="{% url 'poll:question_details' pk=question.pk %}">Подробно</a></td>
+					</tr>
+					{% endfor %}
 				</tbody>
-			  </table>
-
-			
+			</table>
 		</div>
 	</div>
 </div>
+
 {% endblock %}
