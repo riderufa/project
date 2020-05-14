@@ -20,7 +20,7 @@ from .models import Poll, UserProfile, Question, CheckedQuestion, CheckedAnswer,
 Контроллеры пользователя
 """
 
-cache = redis.Redis(host='127.0.0.1', port=6379)
+cache = redis.Redis(host='REDIS_URL', port=6379)
 
 
 @login_required

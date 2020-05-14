@@ -1,0 +1,6 @@
+{
+    "name": "HR",
+    "description": "Project",
+    "image": "heroku/python",
+    "keywords": ["python", "django" ]
+  }
